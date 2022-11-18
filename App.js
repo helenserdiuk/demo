@@ -1,40 +1,41 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, ImageBackground, Platform } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useCallback } from "react";
+import { StyleSheet, View, Text, Platform } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 
-import LoginScreen from "./Screens/LoginScreens";
-import RegistrationScreen from "./Screens/RegistrationScreen";
+import UseRoute from "./router";
 
-// import * as Font from "expo-font";
-// import { AppLoading } from "expo";
-
-// const loadApplication = async () => {
-//   await Font.loadAsync({
-//     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-//     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-//   });
-// };
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 export default function App() {
-  // const [isReady, setIsReady] = useState(false);
+  const [fontsLoaded] = useFonts({
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+  });
 
-  // if (!isReady) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadApplication}
-  //       onFinish={() => setIsReady(true)}
-  //       onError={console.warn()}
-  //     />
-  //   );
-  // }
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
-    <View style={styles.container}>
-      <ImageBackground style={styles.image} source={require("./image/img.png")}>
-        {/* <LoginScreen /> */}
-        <RegistrationScreen />
-      </ImageBackground>
-      <StatusBar style="auto" />
+    <View style={styles.container} onLayout={onLayoutRootView}>
+      <NavigationContainer>
+        <UseRoute />
+      </NavigationContainer>
     </View>
   );
 }
@@ -43,11 +44,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Platform.OS === "ios" ? "#e5e5f5" : "#e8e8d8",
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    width: "100%",
-    height: 900,
   },
 });
