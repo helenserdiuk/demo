@@ -1,6 +1,6 @@
 import { Svg, Rect, G, ClipPath, Defs, Path } from "react-native-svg";
 
-export function Camera() {
+export function Foto() {
   return (
     <Svg
       width="24"

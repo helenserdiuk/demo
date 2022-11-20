@@ -1,20 +1,21 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Tab = createBottomTabNavigator();
 
-import PostsScreen from "./mainScreen/PostsScreen";
-import CreatePostsScreen from "./mainScreen/CreatePostsScreen";
-import ProfileScreen from "./mainScreen/ProfileScreen";
-import { Grid, Union, User } from "../components/icon/iconsMenu";
-import LogOut from "../components/icon/iconLogOut";
-import Back from "../components/icon/iconBack";
+import PostsScreen from "../nestedScreens/PostsScreen";
+import CreatePostsScreen from "./CreatePostsScreen";
+import ProfileScreen from "./ProfileScreen";
+import { Grid, Union, User } from "../../components/icon/iconsMenu";
+import LogOut from "../../components/icon/iconLogOut";
+import Back from "../../components/icon/iconBack";
 
-const Home = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Tab.Navigator
+        initialRouteName="Posts"
         screenOptions={{
           tabBarStyle: {
             paddingHorizontal: 80,
@@ -110,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default HomeScreen;

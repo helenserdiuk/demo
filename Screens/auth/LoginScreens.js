@@ -63,11 +63,11 @@ const LoginScreen = ({ navigation, route }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={onTouchWindow}>
-      <ImageBackground
-        style={styles.image}
-        source={require("../../image/img.png")}
-      >
+    <ImageBackground
+      style={styles.image}
+      source={require("../../image/img.png")}
+    >
+      <TouchableWithoutFeedback onPress={onTouchWindow}>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
@@ -142,8 +142,8 @@ const LoginScreen = ({ navigation, route }) => {
             </View>
           </View>
         </KeyboardAvoidingView>
-      </ImageBackground>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </ImageBackground>
   );
 };
 
