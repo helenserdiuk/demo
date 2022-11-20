@@ -50,10 +50,8 @@ const CreatePostsScreen = ({ navigation }) => {
     const photo = await camera.takePictureAsync();
     setPhoto(photo.uri);
     const location = await Location.getCurrentPositionAsync();
-    setLocation(location);
-    console.log(location.coords.latitude);
-    console.log(location.coords.longitude);
-    navigation.navigate("Posts");
+    // console.log(location.coords);
+    setLocation(location.coords);
   };
 
   const onTouchWindow = () => {
@@ -63,7 +61,8 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const sendPhoto = () => {
-    navigation.navigate("Posts", { photo, ...state, location });
+    const { latitude, longitude } = location;
+    navigation.navigate("Posts", { photo, ...state, latitude, longitude });
     setPhoto(() => "");
     setState(initialState);
     setLocation(() => null);

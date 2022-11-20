@@ -11,7 +11,7 @@ import { Grid, Union, User } from "../../components/icon/iconsMenu";
 import LogOut from "../../components/icon/iconLogOut";
 import Back from "../../components/icon/iconBack";
 
-const HomeScreen = ({ navigation }) => {
+const DefaultPosts = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Tab.Navigator
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default DefaultPosts;

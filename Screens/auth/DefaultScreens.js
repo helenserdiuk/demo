@@ -2,26 +2,28 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-const Stack = createStackNavigator();
+const Nested = createStackNavigator();
 
 import HomeScreen from "../mainScreen/HomeScreen";
 import CommentsScreen from "../nestedScreens/CommentsScreen";
 import MapScreen from "../nestedScreens/MapScreen";
+import PostsScreen from "../nestedScreens/PostsScreen";
 import Back from "../../components/icon/iconBack";
 
 export default function DefaultScreens() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <Nested.Navigator>
+      <Nested.Screen
         options={{
           headerShown: false,
         }}
         name="Home"
         component={HomeScreen}
       />
-      <Stack.Screen name="Comments" component={CommentsScreen} />
-      <Stack.Screen name="MapScreen" component={MapScreen} />
-    </Stack.Navigator>
+      {/* <Nested.Screen name="Posts" component={PostsScreen} /> */}
+      <Nested.Screen name="Comments" component={CommentsScreen} />
+      <Nested.Screen name="MapScreen" component={MapScreen} />
+    </Nested.Navigator>
   );
 }
 

@@ -57,7 +57,7 @@ const LoginScreen = ({ navigation, route }) => {
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
+    // console.log(state);
     navigation.navigate("Home");
     setState(initialState);
   };

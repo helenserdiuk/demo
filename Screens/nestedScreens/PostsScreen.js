@@ -12,7 +12,7 @@ import { Map, Message } from "../../components/icon/icons";
 const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
 
-  console.log(posts);
+  // console.log(posts);
 
   useEffect(() => {
     if (route.params) {
@@ -46,6 +46,9 @@ const PostsScreen = ({ navigation, route }) => {
             data={posts}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
+              // {
+              //   console.log("item:", item);
+              // }
               <View
                 style={{
                   marginBottom: 34,
@@ -88,7 +91,11 @@ const PostsScreen = ({ navigation, route }) => {
                     >
                       <TouchableOpacity
                         activeOpacity={0.6}
-                        onPress={() => navigation.navigate("MapScreen")}
+                        onPress={() =>
+                          navigation.navigate("Map", {
+                            ...item,
+                          })
+                        }
                       >
                         <Map />
                       </TouchableOpacity>

@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
-export default function MapScreen() {
-  // const { latitude, longitude } = route.params;
+export default function MapScreen({ route }) {
+  const [location, setLocation] = useState([]);
+
+  useEffect(() => {
+    if (route.params) {
+      setLocation((prevState) => {
+        return [...prevState, route.params];
+      });
+    }
+  }, [route.params]);
+
   return (
     <View style={styles.container}>
       {/* <Text>MapScreen</Text> */}

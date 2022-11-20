@@ -57,7 +57,7 @@ const RegistrationScreen = ({ navigation }) => {
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
+    // console.log(state);
     navigation.navigate("Login", { email, password });
     setState(initialState);
   };

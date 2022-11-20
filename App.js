@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from "react";
-import { StyleSheet, View, Text, Platform } from "react-native";
+import { StyleSheet, View, Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-
+import { Provider } from "react-redux";
 import UseRoute from "./router";
 
 import { useFonts } from "expo-font";
@@ -33,9 +33,11 @@ export default function App() {
 
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
-      <NavigationContainer>
-        <UseRoute />
-      </NavigationContainer>
+      <Provider>
+        <NavigationContainer>
+          <UseRoute />
+        </NavigationContainer>
+      </Provider>
     </View>
   );
 }
