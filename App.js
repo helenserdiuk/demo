@@ -2,8 +2,8 @@ import React, { useEffect, useCallback } from "react";
 import { StyleSheet, View, Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
+import { store } from "./redux/store";
 import UseRoute from "./router";
-
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -33,7 +33,7 @@ export default function App() {
 
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
-      <Provider>
+      <Provider store={store}>
         <NavigationContainer>
           <UseRoute />
         </NavigationContainer>

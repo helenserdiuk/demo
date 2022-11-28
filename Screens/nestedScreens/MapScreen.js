@@ -1,33 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 export default function MapScreen({ route }) {
-  const [location, setLocation] = useState([]);
+  const [location, setLocation] = useState({});
 
   useEffect(() => {
     if (route.params) {
-      setLocation((prevState) => {
-        return [...prevState, route.params];
-      });
+      const { latitude, longitude } = route.params.location;
+      setLocation({ latitude, longitude });
     }
   }, [route.params]);
 
   return (
     <View style={styles.container}>
-      {/* <Text>MapScreen</Text> */}
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: 50.516339,
-          longitude: 30.602185,
+          ...location,
+
+          // latitude: 50.516339,
+          // longitude: 30.602185,
           latitudeDelta: 0.001,
           longitudeDelta: 0.006,
         }}
       >
         <Marker
-          coordinate={{ latitude: 50.516339, longitude: 30.602185 }}
-          //   image={{ uri: "custom_pin" }}
+          coordinate={{
+            ...location,
+
+            // latitude: 50.516339,
+            // longitude: 30.602185
+          }}
         />
       </MapView>
     </View>

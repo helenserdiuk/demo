@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useDispatch } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
@@ -11,7 +12,11 @@ import { Grid, Union, User } from "../../components/icon/iconsMenu";
 import LogOut from "../../components/icon/iconLogOut";
 import Back from "../../components/icon/iconBack";
 
+import { userLogOut } from "../../redux/auth/authOperations";
+
 const DefaultPosts = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.container}>
       <Tab.Navigator
@@ -41,7 +46,7 @@ const DefaultPosts = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.6}
                 style={styles.iconWrapper}
-                onPress={() => navigation.navigate("Login")}
+                onPress={() => dispatch(userLogOut())}
               >
                 <LogOut />
               </TouchableOpacity>

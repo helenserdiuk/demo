@@ -8,21 +8,43 @@ import {
   StyleSheet,
 } from "react-native";
 import { Map, Message } from "../../components/icon/icons";
+import { useSelector } from "react-redux";
+import { getDatabase, ref, child, get } from "firebase/database";
+import { getUserInfo } from "../../redux/auth/authSelector";
 
 const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
-
-  // console.log(posts);
+  const userInfo = useSelector(getUserInfo);
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => {
-        if (prevState.photo !== route.params.photo) {
-          return [...prevState, route.params];
-        }
-      });
-    }
+    const getPosts = async () => {
+      await get(child(ref(getDatabase()), `posts/${userInfo.uid}`))
+        .then(async (snapshot) => {
+          if (snapshot.exists()) {
+            const data = await snapshot.val();
+            console.log(data);
+            setPosts(Object.values(data));
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    getPosts();
   }, [route.params]);
+
+  // useEffect(() => {
+  //   if (route.params) {
+  //     setPosts((prevState) => {
+  //       if (prevState.photo !== route.params.photo) {
+  //         return [...prevState, route.params];
+  //       }
+  //     });
+  //   }
+  // }, [route.params]);
 
   return (
     <View style={styles.container}>
@@ -46,20 +68,17 @@ const PostsScreen = ({ navigation, route }) => {
             data={posts}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              // {
-              //   console.log("item:", item);
-              // }
               <View
                 style={{
                   marginBottom: 34,
                 }}
               >
                 <Image
-                  source={{ uri: item.photo }}
+                  source={{ uri: item.pictureUrl }}
                   style={{ height: 240, width: "100%" }}
                 />
                 <View>
-                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style={styles.title}>{item.pictureName}</Text>
                   <View
                     style={{
                       width: "100%",
@@ -76,14 +95,20 @@ const PostsScreen = ({ navigation, route }) => {
                     >
                       <TouchableOpacity
                         activeOpacity={0.6}
-                        onPress={() => navigation.navigate("Comments")}
+                        onPress={() =>
+                          navigation.navigate("Comments", {
+                            postId,
+                            userId: userInfo.uid,
+                            name: userInfo.displayName,
+                          })
+                        }
                       >
                         <Message />
                       </TouchableOpacity>
                       <Text
                         style={{ ...styles.text, color: "#bdbdbd", height: 18 }}
                       >
-                        0
+                        {item?.comments ? Object.keys(item.comments).length : 0}
                       </Text>
                     </View>
                     <View
@@ -93,7 +118,7 @@ const PostsScreen = ({ navigation, route }) => {
                         activeOpacity={0.6}
                         onPress={() =>
                           navigation.navigate("Map", {
-                            ...item,
+                            location,
                           })
                         }
                       >
@@ -106,7 +131,7 @@ const PostsScreen = ({ navigation, route }) => {
                           textDecorationLine: "underline",
                         }}
                       >
-                        {item.map}
+                        {item.pictureLocationName}
                       </Text>
                     </View>
                   </View>

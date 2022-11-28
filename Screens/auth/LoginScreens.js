@@ -12,17 +12,14 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../redux/auth/authOperations";
 
-const initialState = {
-  email: "",
-  password: "",
-};
-
-const LoginScreen = ({ navigation, route }) => {
-  //   console.log(Platform);
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
-  const [state, setState] = useState(initialState);
   const [dimensions, setDimenions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -51,15 +48,15 @@ const LoginScreen = ({ navigation, route }) => {
   const onTouchWindow = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    setState({ ...route.params });
   };
+
+  const dispatch = useDispatch();
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    // console.log(state);
+    dispatch(userLogin({ email, password }));
     navigation.navigate("Home");
-    setState(initialState);
   };
 
   return (
@@ -90,13 +87,11 @@ const LoginScreen = ({ navigation, route }) => {
                   placeholder="Адрес электронной почты"
                   keyboardType="email-address"
                   maxLength={40}
-                  value={state.email}
+                  value={email}
                   onFocus={() => {
                     setIsShowKeyboard(true);
                   }}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
+                  onChangeText={(value) => setEmail(value)}
                 />
                 <View style={{ marginTop: 16, position: "relative" }}>
                   <TextInput
@@ -104,16 +99,11 @@ const LoginScreen = ({ navigation, route }) => {
                     placeholder="Пароль"
                     secureTextEntry={isShowPassword}
                     maxLength={30}
-                    value={state.password}
+                    value={password}
                     onFocus={() => {
                       setIsShowKeyboard(true);
                     }}
-                    onChangeText={(value) =>
-                      setState((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
-                    }
+                    onChangeText={(value) => setPassword(value)}
                   />
                   <TouchableOpacity
                     activeOpacity={0.6}

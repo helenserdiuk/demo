@@ -13,17 +13,16 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from "react-native";
-
-const initialState = {
-  login: "",
-  email: "",
-  password: "",
-};
+import { useDispatch } from "react-redux";
+import { createNewUser } from "../../redux/auth/authOperations";
 
 const RegistrationScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
+
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
-  const [state, setState] = useState(initialState);
   const [dimensions, setDimenions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -53,13 +52,13 @@ const RegistrationScreen = ({ navigation }) => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
-  const { email, password } = state;
+  const dispatch = useDispatch();
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    // console.log(state);
-    navigation.navigate("Login", { email, password });
-    setState(initialState);
+    dispatch(createNewUser({ userName, email, password }));
+    navigation.navigate("Home", { userName, email });
   };
 
   return (
@@ -95,26 +94,22 @@ const RegistrationScreen = ({ navigation }) => {
                 style={styles.input}
                 placeholder="Логин"
                 maxLength={50}
-                value={state.login}
+                value={userName}
                 onFocus={() => {
                   setIsShowKeyboard(true);
                 }}
-                onChangeText={(value) =>
-                  setState((prevState) => ({ ...prevState, login: value }))
-                }
+                onChangeText={(value) => setUserName(value)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Адрес электронной почты"
                 keyboardType="email-address"
                 maxLength={40}
-                value={state.email}
+                value={email}
                 onFocus={() => {
                   setIsShowKeyboard(true);
                 }}
-                onChangeText={(value) =>
-                  setState((prevState) => ({ ...prevState, email: value }))
-                }
+                onChangeText={(value) => setEmail(value)}
               />
               <View style={{ position: "relative" }}>
                 <TextInput
@@ -122,13 +117,11 @@ const RegistrationScreen = ({ navigation }) => {
                   placeholder="Пароль"
                   secureTextEntry={isShowPassword}
                   maxLength={30}
-                  value={state.password}
+                  value={password}
                   onFocus={() => {
                     setIsShowKeyboard(true);
                   }}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
-                  }
+                  onChangeText={(value) => setPassword(value)}
                 />
                 <TouchableOpacity
                   activeOpacity={0.6}
@@ -168,23 +161,12 @@ const styles = StyleSheet.create({
   },
   container: {
     position: "relative",
-    // marginTop: 323,
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingBottom: 78,
     fontStyle: "Roboto-Regular",
     fontWeight: "400",
-    // height: 490,
-    ...Platform.select({
-      ios: {
-        // backgroundColor: "#000000",
-      },
-      android: {
-        // position: "absolute",
-        // marginBottom: 20,
-      },
-    }),
   },
   imageWrapper: {
     position: "absolute",
