@@ -8,8 +8,11 @@ import {
   StyleSheet,
 } from "react-native";
 import LogOut from "../../components/icon/iconLogOut";
+import { useSelector } from "react-redux";
+import { getUserInfo } from "../../redux/auth/authSelector";
 
 const ProfileScreen = ({ navigation }) => {
+  const userInfo = useSelector(getUserInfo);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -37,7 +40,7 @@ const ProfileScreen = ({ navigation }) => {
           >
             <LogOut />
           </TouchableOpacity>
-          <Text style={styles.title}>Natali Romanova</Text>
+          <Text style={styles.title}>{userInfo.displayName}</Text>
         </View>
       </ImageBackground>
     </View>

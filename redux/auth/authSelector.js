@@ -1,13 +1,11 @@
 export const getErrorAndLoadingAuth = (store) => {
-    return { loading: store.auth.loading, error: store.auth.error };
-  };
+  return { loading: store.auth.loading, error: store.auth.error };
+};
 
-  export const isUserLogin = (store)=>{
-    
-    return store.auth.token? true: false;
-  }
+export const isUserLogin = (store) => {
+  return store.auth.token ? true : false;
+};
 
-  export const getUserInfo = (store)=>{
-    return store.auth.user;
-  }
-
+export const getUserInfo = (store) => {
+  return store.auth.user;
+};

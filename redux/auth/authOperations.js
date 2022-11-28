@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 import db from "../../firebase/config";
 
@@ -16,9 +17,11 @@ export const createNewUser = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const { userName, email, password } = data;
+      // console.log("data", data);
       await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(auth.currentUser, { displayName: userName });
       const user = auth.currentUser;
+      console.log("user", user);
 
       const value = {
         token: user.accessToken,
@@ -26,6 +29,7 @@ export const createNewUser = createAsyncThunk(
         displayName: user.displayName,
         uid: user.uid,
       };
+      console.log(value);
       return value;
     } catch (error) {
       return rejectWithValue(error.message);

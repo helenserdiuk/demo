@@ -46,7 +46,10 @@ const DefaultPosts = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.6}
                 style={styles.iconWrapper}
-                onPress={() => dispatch(userLogOut())}
+                onPress={() => {
+                  dispatch(userLogOut());
+                  navigation.navigate("Login");
+                }}
               >
                 <LogOut />
               </TouchableOpacity>

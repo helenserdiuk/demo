@@ -16,6 +16,7 @@ const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
   const userInfo = useSelector(getUserInfo);
 
+  console.log("userInfo", userInfo);
   useEffect(() => {
     const getPosts = async () => {
       await get(child(ref(getDatabase()), `posts/${userInfo.uid}`))
@@ -54,8 +55,8 @@ const PostsScreen = ({ navigation, route }) => {
             <Image />
           </View>
           <View style={{ marginLeft: 8 }}>
-            <Text style={styles.login}>Natali Romanova</Text>
-            <Text style={styles.email}>email@example.com</Text>
+            <Text style={styles.login}>{userInfo.displayName}</Text>
+            <Text style={styles.email}>{userInfo.email}</Text>
           </View>
         </View>
         <View
