@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSelector } from "react-redux";
 import { isUserLogin } from "./redux/auth/authSelector";
-import db from "./firebase/firebaseConfig";
+import db from "./firebase/config";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { userCurrent } from "./redux/auth/authReducer";
+import { useDispatch } from "react-redux";
 
 const isAuth = () => {
   return useSelector(isUserLogin);
