@@ -14,7 +14,7 @@ import {
 
 import { Send } from "../../components/icon/icons";
 
-// import { getDatabase, ref, child, get, set } from "firebase/database";
+import { getDatabase, ref, child, get, set } from "firebase/database";
 
 import { useEffect, useState } from "react";
 

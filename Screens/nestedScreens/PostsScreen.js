@@ -16,7 +16,6 @@ const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
   const userInfo = useSelector(getUserInfo);
 
-  console.log("userInfo", userInfo);
   useEffect(() => {
     const getPosts = async () => {
       await get(child(ref(getDatabase()), `posts/${userInfo.uid}`))

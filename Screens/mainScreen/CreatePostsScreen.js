@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Image,
@@ -16,6 +16,12 @@ import { Camera } from "expo-camera";
 import { Foto, Map, Trash } from "../../components/icon/icons";
 import * as Location from "expo-location";
 
+import { useSelector } from "react-redux";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getDatabase, set, ref as DataBaseRef } from "firebase/database";
+import App from "../../firebase/config";
+import { getUserInfo } from "../../redux/auth/authSelector";
+
 const initialState = {
   title: "",
   map: "",
@@ -28,6 +34,36 @@ const CreatePostsScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [photo, setPhoto] = useState("");
   const [location, setLocation] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState("");
+
+  const userInfo = useSelector(getUserInfo);
+  const { displayName, email } = userInfo;
+
+  const uploadPostToServer = async (photoUrl, location) => {
+    const postId = String(Date.now());
+    set(DataBaseRef(getDatabase(App), `posts/${userInfo.uid}/` + postId), {
+      username: displayName,
+      email: email,
+      pictureUrl: photoUrl,
+      postId,
+      pictureName: state.title,
+      pictureLocationName: state.map,
+      location: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+      },
+    });
+  };
+
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const storage = getStorage();
+    const starsRef = ref(storage, `posts/${Date.now()}`);
+    const result = await uploadBytes(starsRef, file);
+    const processedPhoto = await getDownloadURL(starsRef);
+    setPhotoUrl(processedPhoto);
+  };
 
   if (!permission) {
     // Camera permissions are still loading
@@ -46,26 +82,26 @@ const CreatePostsScreen = ({ navigation }) => {
     );
   }
 
-  const takePhoto = async () => {
-    const photo = await camera.takePictureAsync();
-    setPhoto(photo.uri);
-    const location = await Location.getCurrentPositionAsync();
-    // console.log(location.coords);
-    setLocation(location.coords);
-  };
-
   const onTouchWindow = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     setState(state);
   };
 
+  const takePhoto = async () => {
+    const photo = await camera.takePictureAsync();
+    setPhoto(photo.uri);
+    const location = await Location.getCurrentPositionAsync();
+    setLocation(location.coords);
+  };
+
   const sendPhoto = () => {
-    const { latitude, longitude } = location;
-    navigation.navigate("Posts", { photo, ...state, latitude, longitude });
+    uploadPhotoToServer();
+    uploadPostToServer(photoUrl, location);
     setPhoto(() => "");
     setState(initialState);
     setLocation(() => null);
+    navigation.navigate("Posts", { photoUrl, ...state, ...location });
   };
 
   const openLocation = async () => {
